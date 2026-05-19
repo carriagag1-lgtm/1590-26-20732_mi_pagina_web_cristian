@@ -1,0 +1,86 @@
+<html>
+<head>
+    <title>Juego de Trivia</title>
+</head>
+<body>
+
+    <center>
+        <h2>🎮 JUEGO DE TRIVIA 🎮</h2>
+        
+        <h3 id="texto-pregunta">Presiona el botón para empezar</h3>
+        
+        <div id="caja-opciones">
+            <button onclick="iniciarJuego()" style="padding: 10px 20px; font-size: 16px;">Iniciar Juego</button>
+        </div>
+        
+        <br>
+        <h2 id="mensaje-alerta" style="color: blue;"></h2>
+    </center>
+
+    <script>
+        // Listado simple de 4 preguntas de cultura general
+        var listaPreguntas = [
+            { q: "¿Cuál es el lugar más frío de la Tierra?", a: "La Antártida", b: "Siberia", c: "Alaska", correcta: "A" },
+            { q: "¿Quién pintó la famosa obra de 'La Mona Lisa'?", a: "Vincent van Gogh", b: "Leonardo da Vinci", c: "Pablo Picasso", correcta: "B" },
+            { q: "¿Cuál es el río más largo del mundo?", a: "Río Nilo", b: "Río Misisipi", c: "Río Amazonas", correcta: "C" },
+            { q: "¿Cuál es el océano más grande del mundo?", a: "Océano Atlántico", b: "Océano Índico", c: "Océano Pacífico", correcta: "C" }
+        ];
+
+        var numeroPregunta = 0;
+        var puntos = 0;
+
+        function iniciarJuego() {
+            numeroPregunta = 0;
+            puntos = 0;
+            document.getElementById("mensaje-alerta").innerHTML = "";
+            mostrarPregunta();
+        }
+
+        function mostrarPregunta() {
+            // Agarramos la pregunta que toca
+            var actual = listaPreguntas[numeroPregunta];
+            
+            // Ponemos el texto de la pregunta en la pantalla
+            document.getElementById("texto-pregunta").innerHTML = actual.q;
+            
+            // Pintamos los 3 botones de respuestas a puro HTML básico
+            var opcionesHTML = "";
+            opcionesHTML += "<button onclick='revisar(\"A\")' style='display:block; margin:10px; padding:10px; width:200px;'> " + actual.a + "</button>";
+            opcionesHTML += "<button onclick='revisar(\"B\")' style='display:block; margin:10px; padding:10px; width:200px;'>" + actual.b + "</button>";
+            opcionesHTML += "<button onclick='revisar(\"C\")' style='display:block; margin:10px; padding:10px; width:200px;'>" + actual.c + "</button>";
+            
+            document.getElementById("caja-opciones").innerHTML = opcionesHTML;
+        }
+
+        function revisar(letraMarcada) {
+            var actual = listaPreguntas[numeroPregunta];
+            
+            // Revisamos con un IF de toda la vida si le atinó
+            if (letraMarcada === actual.correcta) {
+                document.getElementById("mensaje-alerta").innerHTML = "✅ ¡Se ve que si le sabes :)!";
+                puntos = puntos + 1; // Sumamos un punto
+            } else {
+                document.getElementById("mensaje-alerta").innerHTML = "❌ ¡Noo, consentrate -_-!";
+            }
+            
+            // Esperamos 1 segundo y pasamos a la siguiente sola
+            setTimeout(pasarSiguiente, 1000);
+        }
+
+        function pasarSiguiente() {
+            document.getElementById("mensaje-alerta").innerHTML = ""; // Limpiamos el aviso
+            numeroPregunta = numeroPregunta + 1; // Avanzamos la pregunta
+            
+            // Si todavía no llegamos a 4, mostramos la otra pregunta
+            if (numeroPregunta < 4) {
+                mostrarPregunta();
+            } else {
+                // Si ya terminamos, mostramos el punteo final y el botón de volver a jugar
+                document.getElementById("texto-pregunta").innerHTML = "🎉 ¡Juego Terminado! 🎉";
+                document.getElementById("caja-opciones").innerHTML = "<h3>Acertaste: " + puntos + " / 4</h3><br><button onclick='iniciarJuego()' style='padding:10px; background-color:red; color:white;'>Reintentar</button>";
+            }
+        }
+    </script>
+
+</body>
+</html>
